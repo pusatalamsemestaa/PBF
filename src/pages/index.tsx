@@ -13,15 +13,11 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
   return (
     <div>
-
-        <h1>Selamat Datang di Halaman Utama!</h1>
+      <Head>
+        <title>Praktikum Next.js Pages Router</title>
+      </Head> 
+        <h1>Praktikum Next.js Pages Router</h1>
         <p>Mahasiswa D4 Pengembangan Web Berbasis FrameWork</p>
-   {/* 2. Tambahkan Navigasi ke Halaman About */}
-      <nav style={{ marginTop: '20px' }}>
-        <Link href="/api/about" style={{ color: 'blue', textDecoration: 'underline' }}>
-          Lihat Halaman About (API)
-        </Link>
-      </nav>
     </div> 
   )
 }
