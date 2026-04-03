@@ -1,0 +1,57 @@
+.error {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  
+  // Custom Warna & Font
+  background: radial-gradient(circle, #ffffff 0%, #f0f4f8 100%);
+  color: #2d3748;
+  font-family: 'Inter', sans-serif; // Pastikan font ini sudah di-import di _app atau index
+  text-align: center;
+
+  &__image {
+    width: 350px; // Ukuran sedikit lebih besar
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1)); // Efek bayangan pada gambar
+    margin-bottom: 2rem;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #1a365d; // Warna biru gelap untuk judul
+    margin: 0;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: #4a5568;
+    max-width: 400px;
+    line-height: 1.6;
+  }
+
+
+  &__button {
+    margin-top: 2rem;
+    padding: 12px 24px;
+    background-color: #0070f3; // Warna biru khas Next.js/Windows
+    color: #ffffff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 112, 243, 0.2);
+
+    &:hover {
+      background-color: #0056b3;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 112, 243, 0.3);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
