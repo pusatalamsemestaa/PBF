@@ -1,0 +1,39 @@
+// produk.module.scss
+$primary-blue: #2563eb;
+$border-color: #e5e7eb;
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// ... (style ProdukHero tetap sama) ...
+
+.mainContent {
+  padding: 1rem 0;
+
+  .productCard {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    // Container untuk gambar
+    .imageWrapper {
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid $border-color;
+      background-color: #f9fafb; // Warna background jika gambar loading
+    }
+
+    // Mengubah warna teks judul saat card di-hover
+    &:hover h2 {
+      color: $primary-blue;
+    }
+  }
+}

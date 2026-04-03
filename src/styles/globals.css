@@ -1,4 +1,7 @@
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 * {
   box-sizing: border-box;
@@ -19,6 +22,9 @@ a {
   text-decoration: none;
 }
 
+.big{
+  font-size: 1.5rem;
+}
 
 .navbar {
   width: 100%;
