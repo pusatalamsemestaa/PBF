@@ -8,31 +8,32 @@ type ProductType = {
   category: string;
 };
 
-const TampilanProduk = ({ products }: { products: ProductType[] }) => {
+const TampilanProduk = ({ products, isLoading }: { products: ProductType[], isLoading: boolean }) => {
   return (
     <div className={styles.produk}>
       <h1 className={styles.produk__title}>Daftar Produk</h1>
       <div className={styles.produk__content}>
-        {products.length > 0 ? (
-          products.map((produk: ProductType) => (
-            <div key={produk.id} className={styles.produk__content__item}>
-              {/* Konten Produk Asli */}
-              <div className={styles.produk__content__item__image}>
-                <img src={produk.image} alt={produk.name} width={200} />
-              </div>
-              <h4 className={styles.produk__content__item__name}>{produk.name}</h4>
-              <p className={styles.produk__content__item__category}>{produk.category}</p>
-              <p className={styles.produk__content__item__price}>Rp {produk.price.toLocaleString()}</p>
+        {isLoading ? (
+          // Render 4 skeleton saat loading
+          [1, 2, 3, 4].map((i) => (
+            <div key={i} className={styles.produk__content__skeleton}>
+              <div className={styles.produk__content__skeleton__image} />
+              <div className={styles.produk__content__skeleton__name} />
+              <div className={styles.produk__content__skeleton__category} />
+              <div className={styles.produk__content__skeleton__price} />
             </div>
           ))
         ) : (
-          // Render minimal 4 skeleton agar grid terlihat penuh saat loading
-          [1, 2, 3, 4].map((i) => (
-            <div key={i} className={styles.produk__content__skeleton}>
-              <div className={styles.produk__content__skeleton__image}></div>
-              <div className={styles.produk__content__skeleton__name}></div>
-              <div className={styles.produk__content__skeleton__category}></div>
-              <div className={styles.produk__content__skeleton__price}></div>
+          products.map((product) => (
+            <div key={product.id} className={styles.produk__content__item}>
+              <div className={styles.produk__content__item__image}>
+                <img src={product.image} alt={product.name} />
+              </div>
+              <h4 className={styles.produk__content__item__name}>{product.name}</h4>
+              <p className={styles.produk__content__item__category}>{product.category}</p>
+              <p className={styles.produk__content__item__price}>
+                Rp {product.price.toLocaleString('id-ID')}
+              </p>
             </div>
           ))
         )}
@@ -40,4 +41,5 @@ const TampilanProduk = ({ products }: { products: ProductType[] }) => {
     </div>
   );
 };
+
 export default TampilanProduk;

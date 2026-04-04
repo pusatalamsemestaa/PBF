@@ -1,68 +1,59 @@
 .produk {
-  padding: 16px;
-  min-height: 100vh; // Memastikan kontainer punya tinggi cukup
+  padding: 20px;
+  min-height: 100vh;
+  background-color: #000; // Menyesuaikan tampilan hitam di screenshot Anda
 
   &__title {
     text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    color: white; 
-    margin-bottom: 24px;
+    font-size: 28px;
+    color: white;
+    margin-bottom: 30px;
   }
 
   &__content {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; // Agar card berada di tengah
+    justify-content: center;
     gap: 20px;
 
-    &__skeleton {
-      width: 240px;
-      background-color: #1a1a1a; // Beri warna gelap agar kontras di layar hitam
-      border: 1px solid #333;    // Border tipis agar terlihat batasnya
+    // Gaya untuk Item asli dan Skeleton disamakan wadahnya
+    &__item, &__skeleton {
+      width: 250px;
+      background-color: #1a1a1a;
+      border: 1px solid #333;
       border-radius: 12px;
       padding: 16px;
       display: flex;
       flex-direction: column;
-      animation: identifier 1.5s infinite ease-in-out;
+    }
 
+    &__skeleton {
+      animation: pulse 1.5s infinite ease-in-out;
+
+      &__image { height: 200px; background: #333; border-radius: 8px; margin-bottom: 12px; }
+      &__name { height: 20px; width: 80%; background: #333; margin-bottom: 8px; border-radius: 4px; }
+      &__category { height: 14px; width: 40%; background: #333; margin-bottom: 8px; border-radius: 4px; }
+      &__price { height: 18px; width: 60%; background: #333; border-radius: 4px; }
+    }
+
+    &__item {
       &__image {
         width: 100%;
         height: 200px;
-        background-color: #333; // Warna abu tua untuk skeleton di tema gelap
+        overflow: hidden;
         border-radius: 8px;
-        margin-bottom: 16px;
-      }
-
-      &__name {
-        height: 20px;
-        width: 80%;
-        background-color: #333;
         margin-bottom: 12px;
-        border-radius: 4px;
+        img { width: 100%; height: 100%; object-fit: cover; }
       }
-
-      &__category {
-        height: 14px;
-        width: 40%;
-        background-color: #333;
-        margin-bottom: 12px;
-        border-radius: 4px;
-      }
-
-      &__price {
-        height: 18px;
-        width: 60%;
-        background-color: #333;
-        border-radius: 4px;
-      }
+      &__name { color: white; font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+      &__category { color: #888; font-size: 14px; margin-bottom: 8px; }
+      &__price { color: #ff5722; font-weight: bold; font-size: 16px; }
     }
   }
 }
 
-// Animasi Fade In-Out
-@keyframes identifier {
-  0% { opacity: 0.3; }
+@keyframes pulse {
+  0% { opacity: 0.4; }
   50% { opacity: 0.7; }
-  100% { opacity: 0.3; }
+  100% { opacity: 0.4; }
 }
