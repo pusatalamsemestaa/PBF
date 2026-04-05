@@ -1,12 +1,5 @@
 import TampilanProduk from "@/views/products";
-
-type ProductType = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-};
+import { ProductType } from "../types/Product.type";
 
 // Perbaikan pada deklarasi parameter fungsi
 const HalamanProdukServer = (props: { products: ProductType[] }) => {
