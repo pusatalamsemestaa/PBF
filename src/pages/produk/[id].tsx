@@ -1,42 +1,52 @@
 import Link from "next/link";
+import Image from 'next/image';
 import { useRouter } from "next/router";
+// Import tipe data dari folder src/types
+import { ProductType } from "@/types/Product.type";
 
 const DetailProduk = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  const dataProduk = [
+  // 1. Data disesuaikan dengan ProductType (id: string, name, price, image, category)
+  // Kita tambahkan 'deskripsi' karena ini spesifik untuk halaman detail
+  const dataProduk: (ProductType & { deskripsi: string })[] = [
     {
-      id: 1,
-      nama: "Sepatu Olahraga Runner",
-      harga: "750.000",
-      imageUrl: "https://images.unsplash.com/photo-1528701800489-5fc2b6e8fcad?q=80&w=400&auto=format&fit=crop",
-      deskripsi: "Sepatu lari ringa dengan bantalan empuk, cocok digunakan sehari-hari.",
+      id: "1",
+      name: "Adidas Samba OG",
+      price: 2200000,
+      image: "https://media.sivasdescalzo.com/media/catalog/product/B/7/B75806_sivasdescalzo-adidas-SAMBA_OG-1670001647-2.jpg",
+      category: "Sneakers",
+      deskripsi: "Sepatu lari klasik dengan bantalan empuk, cocok digunakan sehari-hari.",
     },
     {
-      id: 2,
-      nama: "Sepatu Kasual Urban",
-      harga: "650.000",
-      imageUrl: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=400&auto=format&fit=crop",
-      deskripsi: "Tampilan gaya kasual modern, nyaman untuk kegiatan santai.",
+      id: "2",
+      name: "Puma SpeedCat",
+      price: 2100000,
+      image: "https://images.puma.com/image/upload/f_auto,q_auto,b_rgb:fafafa,w_706,h_706/global/398846/01/sv04/fnd/ARE/fmt/png/",
+      category: "Sneakers",
+      deskripsi: "Tampilan gaya kasual modern terinspirasi dari balapan, nyaman untuk kegiatan santai.",
     },
     {
-      id: 3,
-      nama: "Sepatu Formal Leather",
-      harga: "1.250.000",
-      imageUrl: "https://images.unsplash.com/photo-1519741498091-32f72dfb5f2b?q=80&w=400&auto=format&fit=crop",
+      id: "3",
+      name: "Sepatu Formal Leather",
+      price: 1250000,
+      image: "https://images.unsplash.com/photo-1519741498091-32f72dfb5f2b?q=80&w=400&auto=format&fit=crop",
+      category: "Formal",
       deskripsi: "Material kulit elegan untuk penampilan profesional.",
     },
     {
-      id: 4,
-      nama: "Sepatu Sneaker Retro",
-      harga: "800.000",
-      imageUrl: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=80&w=400&auto=format&fit=crop",
+      id: "4",
+      name: "Sepatu Sneaker Retro",
+      price: 800000,
+      image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=80&w=400&auto=format&fit=crop",
+      category: "Sneakers",
       deskripsi: "Sneaker retro dengan warna klasik, cocok untuk gaya vintage.",
     },
   ];
 
-  const produk = dataProduk.find((p) => p.id === Number(id));
+  // 2. Cari produk berdasarkan ID (convert query id ke string)
+  const produk = dataProduk.find((p) => p.id === String(id));
 
   if (!produk) {
     return (
@@ -66,18 +76,21 @@ const DetailProduk = () => {
         </div>
 
         <div className="p-6">
-          <div className="overflow-hidden rounded-lg mb-4">
+          <div className="overflow-hidden rounded-lg mb-4 relative h-[300px]">
             <Image
-              src={produk.imageUrl}
-              alt={produk.nama}
-              width={800}
-              height={500}
+              src={produk.image} // Menggunakan produk.image
+              alt={produk.name}  // Menggunakan produk.name
+              layout="fill"
               objectFit="cover"
+              className="rounded-lg"
             />
           </div>
 
-          <h1 className="text-2xl font-bold mb-2">{produk.nama}</h1>
-          <p className="text-xl text-blue-600 font-semibold mb-4">Rp {produk.harga}</p>
+          <h1 className="text-2xl font-bold mb-2">{produk.name}</h1>
+          <p className="text-sm text-gray-500 uppercase tracking-widest mb-1">{produk.category}</p>
+          <p className="text-xl text-blue-600 font-semibold mb-4">
+            Rp {produk.price.toLocaleString("id-ID")} {/* Format angka ke Rupiah */}
+          </p>
           <p className="text-gray-700 mb-6">{produk.deskripsi}</p>
 
           <div className="flex gap-4 flex-col sm:flex-row">
@@ -97,4 +110,3 @@ const DetailProduk = () => {
 };
 
 export default DetailProduk;
-

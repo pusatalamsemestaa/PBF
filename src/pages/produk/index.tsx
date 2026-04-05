@@ -1,6 +1,6 @@
 import TampilanProduk from "@/views/products";
 import useSWR from "swr";
-import fetcher from "../utils/swr/fetcher";
+import fetcher from "@/utils/swr/fetcher";
 
 const KategoriPage = () => {
   // Refactor dari useEffect ke SWR sesuai instruksi tugas
