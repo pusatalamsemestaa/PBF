@@ -1,29 +1,36 @@
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import fetcher from "../../utils/swr/fetcher";
 import DetailProduk from "@/views/DetailProduct";
+import { ProductType } from "../../types/Product.type";
 
-const HalamanProduk = () => {
-  const { query, isReady } = useRouter();
-  
-  // Ambil ID dari query.product (sesuai nama file [product].tsx)
-  const productId = query.product;
-
-  const { data, error, isLoading } = useSWR(
-    // PERBAIKAN: Gunakan productId, bukan query.productId
-    isReady && productId ? `/api/produk/${productId}` : null, 
-    fetcher
-  );
-
-  // Jangan lupa kembalikan tampilan (return)
-  if (isLoading) return <div className="text-white text-center">Loading...</div>;
-  if (!data?.data) return <div className="text-white text-center">Produk tidak ditemukan</div>;
+const HalamanDetailProduk = ({ product }: { product: ProductType }) => {
+  // Jika product null (tidak ditemukan di API)
+  if (!product) {
+    return <div className="text-white text-center p-10">Produk tidak ditemukan</div>;
+  }
 
   return (
     <div>
-      <DetailProduk products={data.data} />
+      {/* Kirim data ke view detail */}
+      <DetailProduk products={product} />
     </div>
   );
 };
 
-export default HalamanProduk;
+export default HalamanDetailProduk;
+
+export async function getServerSideProps({ params }: { params: { product: string } }) {
+  // params.product didapat dari nama file [product].tsx
+  try {
+    const res = await fetch(`http://localhost:3000/api/produk/${params.product}`);
+    const response = await res.json();
+
+    return {
+      props: {
+        product: response.data || null,
+      },
+    };
+  } catch (error) {
+    return {
+      props: { product: null },
+    };
+  }
+}
