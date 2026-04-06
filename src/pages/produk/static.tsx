@@ -13,30 +13,19 @@ const halamanProdukStatic = (props: { products: ProductType[] }) => {
 
 export default halamanProdukStatic;
 
-export async function getStaticProps() {
+export async function getStaticProps({ params }: { params: { product: string } }) {
   try {
-    // Data diambil HANYA saat proses 'npm run build'
-    const res = await fetch("http://127.0.0.1:3000/api/produk");
-
-    if (!res.ok) {
-      throw new Error(`Gagal fetch: ${res.status}`);
-    }
-
-    const response: { data: ProductType[] } = await res.json();
+    const res = await fetch(`http://localhost:3000/api/produk/${params?.product}`);
+    const response = await res.json();
 
     return {
       props: {
-        products: response.data || [],
+        // Jika API detail mengembalikan satu objek produk
+        product: response.data || null, 
       },
-      // Properti 'revalidate' DIHAPUS agar menjadi Pure SSG
+      revalidate: 10, // ISR Aktif
     };
   } catch (error) {
-    console.error("Build Error:", error);
-    return {
-      props: {
-        products: [],
-      },
-      revalidate: 10, // Tetap gunakan revalidate untuk menangani error saat build
-    };
+    return { props: { product: null }, revalidate: 10 };
   }
 }
