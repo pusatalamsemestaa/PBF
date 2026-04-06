@@ -1,5 +1,5 @@
 import styles from "@/pages/produk/produk.module.scss";
-
+import Link from "next/link";
 type ProductType = {
   id: string;
   name: string;
@@ -24,17 +24,22 @@ const TampilanProduk = ({ products, isLoading }: { products: ProductType[], isLo
             </div>
           ))
         ) : (
-          products.map((product) => (
-            <div key={product.id} className={styles.produk__content__item}>
-              <div className={styles.produk__content__item__image}>
-                <img src={product.image} alt={product.name} />
-              </div>
-              <h4 className={styles.produk__content__item__name}>{product.name}</h4>
-              <p className={styles.produk__content__item__category}>{product.category}</p>
-              <p className={styles.produk__content__item__price}>
-                Rp {product.price.toLocaleString('id-ID')}
-              </p>
-            </div>
+          products.map((product : ProductType) => (
+           // Di dalam loop products.map
+<Link href={`/produk/${product.id}`} key={product.id} className={styles.produk__content__item}>
+  <div className={styles.produk__content__item__image}>
+    <img 
+      src={product.image} 
+      alt={product.name} 
+      style={{ pointerEvents: 'none' }} // Mencegah gambar memblokir klik pada Link
+    />
+  </div>
+  <h4 className={styles.produk__content__item__name}>{product.name}</h4>
+  <p className={styles.produk__content__item__category}>{product.category}</p>
+  <p className={styles.produk__content__item__price}>
+    Rp {product.price.toLocaleString('id-ID')}
+  </p>
+</Link>
           ))
         )}
       </div>
