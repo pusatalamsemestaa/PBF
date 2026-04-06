@@ -1,27 +1,26 @@
-import { ProductType } from "../../types/Product.type";
 import styles from "./detailProduct.module.scss";
 
-const DetailProduk = ({ products }: { products: ProductType }) => {
-  // Safety check agar tidak crash saat loading
-  if (!products || !products.name) return null;
+const DetailProduk = ({ products }: { products: any }) => {
+  if (!products) return null;
 
   return (
-  <>
-    <h1 className={styles.title}>Detail Produk</h1>
-    <div className={styles.productDetail}>
-      <div className={styles._image}>
-        <img src={products.image} alt={products.name} />
-      </div>
+    <div className={styles.container}> {/* Background Hitam */}
+      <h1 className={styles.title}>Detail Produk</h1>
+      
+      <div className={styles.productDetail}> {/* Kartu Putih */}
+        <div className={styles._image}>
+          <img src={products.image} alt={products.name} />
+        </div>
 
-      <div className={styles._info}>
-        <h1 className={styles._name}>{products.name}</h1>
-        <p className={styles._category}>{products.category}</p>
-        <p className={styles._price}>
-          Rp {products.price?.toLocaleString("id-ID") || "0"}
-        </p>
+        <div className={styles._info}>
+          <h1 className={styles._name}>{products.name}</h1>
+          <p className={styles._category}>{products.category}</p>
+          <p className={styles._price}>
+            Rp {products.price?.toLocaleString("id-ID")}
+          </p>
+        </div>
       </div>
     </div>
-  </>
   );
 };
 
