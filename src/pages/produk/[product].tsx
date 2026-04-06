@@ -50,13 +50,25 @@ export async function getStaticPaths() {
   };
 }
 
+// src/pages/produk/[product].tsx
+
 export async function getStaticProps({ params }: { params: { product: string } }) {
-  // PERBAIKAN: Gunakan params.product
-  const res = await fetch(`http://localhost:3000/api/produk/${params?.product}`);
-  const response = await res.json() as { data: ProductType[] };
-  return {
-    props: {
-      product: response.data ,
-    },
-  };
+  try {
+    const res = await fetch(`http://localhost:3000/api/produk/${params?.product}`);
+    
+    if (!res.ok) throw new Error("Gagal mengambil data");
+
+    const response = await res.json();
+
+    return {
+      props: {
+        // Ambil data produk tunggal sesuai struktur API kamu
+        product: response.data || null, 
+      },
+      revalidate: 10,
+    };
+  } catch (error) {
+    console.error("Error Detail:", error);
+    return { props: { product: null } };
+  }
 }

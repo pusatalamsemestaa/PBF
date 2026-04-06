@@ -36,6 +36,7 @@ export async function getStaticProps() {
       props: {
         products: [],
       },
+      revalidate: 10, // Tetap gunakan revalidate untuk menangani error saat build
     };
   }
 }
