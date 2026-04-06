@@ -1,17 +1,13 @@
-import Link from "next/dist/client/link";
+import { useSession } from "next-auth/react";
 
-const profile = () => {
+const HalamanProfile = () => {
+  const { data }: any = useSession();
   return (
-  <div>
-    Halaman Profile User
-      {/* 2. Tambahkan Navigasi ke Halaman About */}
-          <nav style={{ marginTop: '20px' }}>
-            <Link href="/profile/edit" style={{ color: 'blue', textDecoration: 'underline' }}>
-              Edit Profile
-            </Link>
-          </nav>
-  </div>
-  );
-};
+    <div>
+      <h1>Halaman Profile</h1><br />
+      <h1>Selamat Datang {data?.user?.fullname}</h1>
+    </div>
+  )
+}
 
-export default profile; 
+export default HalamanProfile

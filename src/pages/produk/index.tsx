@@ -1,25 +1,23 @@
 import TampilanProduk from "@/views/products";
-import { useEffect, useState } from "react";
-import {useRouter } from "next/router";
+import { useRouter } from "next/router";
 import useSWR from "swr";
 import fetcher from "@/utils/swr/fetcher";
 
 const KategoriPage = () => {
-  const router = useRouter();
-  const { data, isLoading } = useSWR("/api/produk", fetcher);
+  const { data, isLoading, error } = useSWR("/api/produk", fetcher);
 
-  useEffect(() => {
-    // Jika tidak sedang loading dan data ada
-    if (!isLoading && data?.data?.length > 0) {
-      // OPSI A: Langsung arahkan ke ID spesifik yang kamu mau
-      // router.replace("/produk/aGSq2vFs6t1S33GaRvPo");
+  // Jika terjadi error pada SWR, tampilkan pesan error atau log
+  if (error) return <div className="text-white">Gagal memuat data produk.</div>;
 
-      // OPSI B: Arahkan ke produk pertama yang ada di Firebase secara otomatis
-      router.replace(`/produk/${data.data[0].id}`);
-    }
-  }, [data, isLoading, router]);
-
-  return <div className="text-white text-center">Mengalihkan...</div>;
+  return (
+    <div>
+      <TampilanProduk 
+        // Gunakan optional chaining dan pastikan fallback ke array kosong
+        products={data?.data ? data.data : []} 
+        isLoading={isLoading} 
+      />
+    </div>
+  );
 };
 
 export default KategoriPage;
