@@ -1,4 +1,13 @@
-import { getFirestore, collection, getDocs, Firestore, getDoc, doc } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  query,
+  where,
+  addDoc,
+} from "firebase/firestore";
 import app from "./firebase";
 
 const db = getFirestore(app);
@@ -9,7 +18,7 @@ export async function retrieveProducts(collectionName: string) {
     id: doc.id,
     ...doc.data(),
   }));
-    return data;
+  return data;
 }
 
 export async function retrieveDataByID(collectionName: string, id: string) {
@@ -18,4 +27,36 @@ export async function retrieveDataByID(collectionName: string, id: string) {
   return data;
 }
 
+export async function signUp(
+  userData: {
+    email: string;
+    fullname: string;
+    password: string;
+  },
+  callback: Function,
+) {
+  const q = query(
+    collection(db, "users"),
+    where("email", "==", userData.email),
+  );
 
+  const querySnapshot = await getDocs(q);
+  const data = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  console.log("Query result:", data);
+  if (data.length === 0) {
+    const user = await addDoc(collection(db, "users"), userData);
+    callback({
+      status: "success",
+      message: "User registered successfully",
+    });
+  } else {
+    callback({
+      status: "error",
+      message: "User already exists",
+    });
+  }
+}
