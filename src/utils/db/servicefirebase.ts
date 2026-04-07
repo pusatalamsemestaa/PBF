@@ -9,8 +9,10 @@ import {
   addDoc,
 } from "firebase/firestore";
 import app from "./firebase";
+import bcrypt from "bcryptjs";
 
 const db = getFirestore(app);
+
 
 export async function retrieveProducts(collectionName: string) {
   const snapshot = await getDocs(collection(db, collectionName));
@@ -28,35 +30,41 @@ export async function retrieveDataByID(collectionName: string, id: string) {
 }
 
 export async function signUp(
-  userData: {
-    email: string;
-    fullname: string;
-    password: string;
-  },
-  callback: Function,
+  userData: { email: string; fullname: string; password: string; role?: string },
+  callback: Function
 ) {
   const q = query(
     collection(db, "users"),
-    where("email", "==", userData.email),
+    where("email", "==", userData.email)
   );
 
-  const querySnapshot = await getDocs(q);
-  const data = querySnapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
+  try {
+    const querySnapshot = await getDocs(q);
 
-  console.log("Query result:", data);
-  if (data.length === 0) {
-    const user = await addDoc(collection(db, "users"), userData);
+    if (querySnapshot.size > 0) {
+      return callback({
+        status: "error",
+        message: "User already exists",
+      });
+    }
+
+    // Gunakan hash (bukan hashSync) untuk performa lebih baik di server
+    userData.password = await bcrypt.hash(userData.password, 10);
+    userData.role = "user";
+
+    // Simpan ke Firestore
+    await addDoc(collection(db, "users"), userData);
+    
     callback({
       status: "success",
       message: "User registered successfully",
     });
-  } else {
+    
+  } catch (error: any) {
+    console.error("Error adding document: ", error);
     callback({
       status: "error",
-      message: "User already exists",
+      message: "Failed to register user",
     });
   }
 }

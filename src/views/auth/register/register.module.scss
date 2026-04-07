@@ -25,6 +25,13 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     animation: fadeIn 0.5s ease forwards;
 
+  &__error {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
     // Masuk ke level item agar sesuai JSX: style.register__form__item
     &__item {
       display: flex;

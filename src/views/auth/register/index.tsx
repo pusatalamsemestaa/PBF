@@ -22,13 +22,13 @@ const TampilanRegister = () => {
     const password = formData.get("Password") as string;
 
     try {
-      const response = await fetch("/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, fullname, password }),
-      });
+      const response = await fetch("/api/auth/register", { // Pastikan URL ini tepat
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({ email, fullname, password }),
+});
 
       if (response.status === 200) {
         form.reset();
@@ -48,6 +48,7 @@ const TampilanRegister = () => {
 
   return (
     <div className={style.register}>
+      {error && <p className={style.register__error}>{error}</p>}
       <h1 className={style.register__title}>Halaman Register</h1>
       
       <div className={style.register__form}>
@@ -120,7 +121,7 @@ const TampilanRegister = () => {
             className={style.register__form__item__button}
             disabled={isLoading}
           >
-            {isLoading ? "Memproses..." : "Register"}
+            {isLoading ? "Loading..." : "Register"}
           </button>
         </form>
       </div>
