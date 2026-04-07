@@ -1,72 +1,75 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
-import styles from "./register.module.scss";
+import style from "../../auth/register/register.module.scss";
 
-const halamanRegister = () => {
-  const { push } = useRouter();
-
-  const handlerRegister = () => {
-    // logika register di sini
-    // simulasikan penyimpanan data setelah register berhasil
-    try {
-      localStorage.setItem('token', 'dummy-token');
-    } catch (err) {
-      console.warn('Tidak bisa mengakses localStorage', err);
-    }
-    push('/produk');
-  };
-
+const TampilanRegister = () => {
   return (
-  <div className={styles.register}>
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div className={style.register}>
+      <h1 className={style.register__title}>Halaman Register</h1>
       
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold text-center text-blue-600 mb-6">
-          Halaman Register
-        </h1>
+      <div className={style.register__form}>
+        <form action="">
+          {/* Input Fullname */}
+          <div className={style.register__form__item}>
+            <label
+              htmlFor="email"
+              className={style.register__form__item__label}
+            >
+              Email
+            </label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              placeholder="Email"
+              className={style.register__form__item__input}
+            />
+          </div>
 
-        <form className="flex flex-col gap-4">
-          <input
-            type="text"
-            placeholder="Nama Lengkap"
-            className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          {/* Input Fullname */}
+          <div className={style.register__form__item}>
+            <label
+              htmlFor="Fullname"
+              className={style.register__form__item__label}
+            >
+              Fullname
+            </label>
+            <input
+              type="text"
+              id="Fullname"
+              name="Fullname"
+              placeholder="Fullname"
+              className={style.register__form__item__input}
+            />
+          </div>
 
-          <input
-            type="email"
-            placeholder="Email"
-            className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+          {/* Input Password */}
+          <div className={style.register__form__item}>
+            <label
+              htmlFor="Password"
+              className={style.register__form__item__label}
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="Password"
+              name="Password"
+              placeholder="Password"
+              className={style.register__form__item__input}
+            />
+          </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            className="border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-
-          <button
-            type="button"
-            onClick={handlerRegister}
-            className="bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
-          >
+          <button type="submit" className={style.register__form__item__button}>
             Register
           </button>
         </form>
-
-        <p className="text-sm text-center mt-4 text-gray-600">
-          Sudah punya akun?
-        </p>
-
-        <div className="text-center mt-2">
-          <Link href="/auth/login" className="text-blue-500 hover:underline">
-            Ke Halaman Login
-          </Link>
-        </div>
       </div>
 
+      <p className={style.register__link}>
+        Sudah punya akun? <Link href="/auth/login">Ke Halaman Login</Link>
+      </p>
     </div>
-  </div>
   );
 };
 
-export default halamanRegister;
+export default TampilanRegister;

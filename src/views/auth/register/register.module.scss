@@ -1,68 +1,101 @@
-@import "@/styles/colors.scss";
-
 .register {
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
-  background-color: #f3f4f6;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  padding: 20px;
 
-  .registerCard {
-    background-color: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 350px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  &__title {
+    width: 100%;
+    text-align: center;
+    font-size: 36px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 40px;
+  }
 
-    .title {
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      color: #2563eb;
-    }
+  &__form {
+    background: #ffffff;
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 0.5s ease forwards;
 
-    .input {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      outline: none;
+    // Masuk ke level item agar sesuai JSX: style.register__form__item
+    &__item {
+      display: flex;
+      flex-direction: column; // Memaksa label di ATAS input
+      align-items: flex-start; // Label rata kiri
+      margin-bottom: 20px;
 
-      &:focus {
-        border-color: #2563eb;
+      &__label {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        color: #333;
+      }
+
+      &__input {
+        width: 100%; // Memenuhi lebar form
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        transition: all 0.3s ease;
+
+        &:focus {
+          outline: none;
+          border-color: #2a5298;
+          box-shadow: 0 0 3px rgba(42, 82, 152, 0.2);
+        }
+      }
+
+      &__button {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: none;
+        background: #2a5298;
+        color: #ffffff;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s ease;
+        margin-top: 10px;
+
+        &:hover {
+          background: #1e3c72;
+          transform: translateY(-2px);
+        }
       }
     }
+  }
 
-    .button {
-      background-color: #3b82f6;
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: 0.3s;
+  &__link {
+    margin-top: 20px;
+    text-align: left;
+    font-size: 14px;
+    color: #000;
 
-      &:hover {
-        background-color: #2563eb;
-      }
-    }
-
-    .text {
-      text-align: center;
-      font-size: 14px;
-      color: #555;
-    }
-
-    .link {
-      text-align: center;
-      color: #3b82f6;
+    a {
+      color: #000;
       text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
+      &:hover { text-decoration: underline; }
     }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+  .register {
+    &__form { padding: 30px 20px; }
+    &__title { font-size: 26px; }
   }
 }
