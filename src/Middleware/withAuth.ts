@@ -1,29 +1,38 @@
 import { getToken } from "next-auth/jwt";
-// Tambahkan NextMiddleware di baris bawah ini
 import { NextFetchEvent, NextMiddleware, NextRequest, NextResponse } from "next/server";
 
 export default function withAuth(
-  middleware: NextMiddleware, // Sekarang TypeScript sudah mengenali tipe ini
-  requireAuth: string[] = [],
+  middleware: NextMiddleware,
+  requireAuth: string[] = []
 ) {
   return async (req: NextRequest, next: NextFetchEvent) => {
     const pathname = req.nextUrl.pathname;
 
-    if (requireAuth.includes(pathname)) {
+    const isProtected = requireAuth.some((path) =>
+      pathname.startsWith(path)
+    );
+
+    if (isProtected) {
       const token = await getToken({
         req,
         secret: process.env.NEXTAUTH_SECRET,
       });
-      
+
+      // 🔒 Belum login
       if (!token) {
-        const loginUrl = new URL("/login", req.url);
-        // Opsional: tambahkan callbackUrl agar user kembali ke halaman asal setelah login
+        const loginUrl = new URL("/auth/login", req.url);
         loginUrl.searchParams.set("callbackUrl", encodeURI(req.url));
-        
         return NextResponse.redirect(loginUrl);
+      }
+
+      // 🔥 Role check admin
+      if (pathname.startsWith("/admin") && token.role !== "admin") {
+        return NextResponse.redirect(new URL("/dashboard", req.url));
       }
     }
 
-    return middleware(req, next);
+    // lanjut ke middleware utama
+    const res = await middleware(req, next);
+    return res || NextResponse.next();
   };
 }
