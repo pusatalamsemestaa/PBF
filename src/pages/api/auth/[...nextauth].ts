@@ -1,25 +1,31 @@
-// Tambahkan DefaultSession di sini
+import { signIn } from "@/utils/db/servicefirebase";
 import NextAuth, { NextAuthOptions, DefaultSession } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
+import bcrypt from "bcryptjs"
 
+// 1. Module Augmentation untuk Type Safety
 declare module "next-auth" {
   interface Session {
     user: {
       fullname?: string | null;
-    } & DefaultSession["user"] // Sekarang DefaultSession sudah terdefinisi
+      role?: string | null; // Tambahkan role di sini
+    } & DefaultSession["user"]
   }
 
   interface User {
     fullname?: string | null;
+    role?: string | null; // Tambahkan role di sini
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
     fullname?: string | null;
+    role?: string | null; // Tambahkan role di sini
   }
 }
 
+// 2. Konfigurasi NextAuth
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
@@ -34,39 +40,54 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        const user = {
-          id: "1",
-          email: credentials?.email,
-          password: credentials?.password,
-          fullname: credentials?.fullname,
+        if (!credentials?.email || !credentials?.password) {
+          return null;
         }
 
+        const user: any = await signIn(credentials.email);
+        
         if (user) {
-          return user
-        } else {
-          return null
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password, 
+            user.password
+          );
+
+          if (isPasswordValid) {
+            return {
+              id: user.id,
+              email: user.email,
+              fullname: user.fullname,
+              role: user.role, 
+            };
+          }
         }
+        return null;
       },
     }),
   ],
+  
   callbacks: {
-    async jwt({ token, account, user }: any) {
-      if (account?.provider === "credentials" && user) {
-        token.email = user.email
-        token.fullname = user.fullname
+    async jwt({ token, user }) {
+      if (user) {
+        token.email = user.email;
+        token.fullname = user.fullname;
+        token.role = user.role; // Masukkan role ke dalam token
       }
-      return token
+      return token;
     },
-    async session({ session, token }: any) {
-      if (token.email) {
-        session.user.email = token.email
+    async session({ session, token }) {
+      // PERBAIKAN: Cek ketersediaan data di dalam token, lalu masukkan ke session.user
+      if (token) {
+        session.user.email = token.email;
+        session.user.fullname = token.fullname;
+        session.user.role = token.role;
       }
-      if (token.fullname) {
-        session.user.fullname = token.fullname
-      }
-      return session
+      return session;
     },
   },
-}
+  pages: {
+    signIn: "/auth/login",
+  },
+};
 
-export default NextAuth(authOptions)
+export default NextAuth(authOptions);
