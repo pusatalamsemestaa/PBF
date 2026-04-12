@@ -67,7 +67,8 @@ export const authOptions: NextAuthOptions = {
               email: user.email,
               fullname: user.fullname,
               // Pastikan membersihkan spasi dari database jika ada
-              role: user.role?.trim() || "user", 
+              role: user.role?.trim() || "user",
+              image: user.image || `https://ui-avatars.com/api/?name=${user.fullname}`
             };
           }
         }
@@ -93,6 +94,8 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.fullname = user.fullname;
         token.role = user.role;
+        token.image = user.image; 
+        token.type = "credentials";
       }
       
       return token;
