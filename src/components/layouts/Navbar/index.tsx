@@ -21,6 +21,7 @@ const Navbar = () => {
     // Tambahkan "|| ''" untuk memastikan nilainya string kosong jika null
     alt={data.user.fullname || 'User Profile'} 
     className={styles.navbar__user__image}
+    referrerPolicy="no-referrer"
   />
 )}
       </div>

@@ -1,4 +1,4 @@
-import { signIn as firebaseSignIn } from "@/utils/db/servicefirebase";
+import { signIn as firebaseSignIn, signInWithGoogle } from "@/utils/db/servicefirebase"; // Pastikan diimpor
 import NextAuth, { NextAuthOptions, DefaultSession } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
@@ -66,7 +66,6 @@ export const authOptions: NextAuthOptions = {
               id: user.id,
               email: user.email,
               fullname: user.fullname,
-              // Pastikan membersihkan spasi dari database jika ada
               role: user.role?.trim() || "user",
               image: user.image || `https://ui-avatars.com/api/?name=${user.fullname}`
             };
@@ -79,17 +78,36 @@ export const authOptions: NextAuthOptions = {
   
   callbacks: {
     async jwt({ token, user, account }) {
-      // Logic untuk Login Google
+      // --- LOGIC UNTUK LOGIN GOOGLE ---
       if (account?.provider === "google" && user) {
-        token.fullname = user.name;
-        token.email = user.email;
-        token.image = user.image;
-        token.type = account.provider;
-        // Opsional: set default role untuk user google jika tidak ada di DB
-        token.role = token.role || "user"; 
+        const data = {
+          fullname: user.name,
+          email: user.email,
+          image: user.image,
+          type: account.provider,
+        };
+
+        try {
+          // Membungkus fungsi callback ke dalam Promise agar bisa di-await
+          const result: any = await new Promise((resolve) => {
+            signInWithGoogle(data, (res: any) => {
+              resolve(res);
+            });
+          });
+
+          if (result.status) {
+            token.fullname = result.data.fullname;
+            token.email = result.data.email;
+            token.image = result.data.image;
+            token.type = result.data.type;
+            token.role = result.data.role;
+          }
+        } catch (error) {
+          console.error("Error during Google Sync:", error);
+        }
       }
 
-      // Logic untuk Login Credentials
+      // --- LOGIC UNTUK LOGIN CREDENTIALS ---
       if (user && account?.provider === "credentials") {
         token.email = user.email;
         token.fullname = user.fullname;
@@ -100,19 +118,14 @@ export const authOptions: NextAuthOptions = {
       
       return token;
     },
+
     async session({ session, token }) {
-      if (token) {
+      if (token && session.user) {
         session.user.email = token.email;
         session.user.fullname = token.fullname;
         session.user.role = token.role;
         session.user.type = token.type;
-        if (token.image) {
-            session.user.image = token.image;
-        }
-
-        if (token.type) {
-            session.user.type = token.type;
-        }
+        session.user.image = token.image;
       }
       return session;
     },
