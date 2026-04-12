@@ -113,7 +113,17 @@ const handleSubmit = async (event: any) => {
                {isLoading ? "Loading..." : "sign in with google"}
           </button>
 
+        <br /> <br />
+        {/* button GitHub */}
+          <button
+            onClick={() => signIn("github", { callbackUrl, redirect: false })}
+            className={style.login__form__item__button}
+            disabled={isLoading}
+            >
+              {isLoading ? "Loading..." : "sign in with github"}
+          </button>
 
+         
         </form>
       </div>
 
