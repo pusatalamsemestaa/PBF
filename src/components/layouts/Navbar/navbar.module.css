@@ -26,17 +26,36 @@
 .navbar__right {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
 }
 
-/* Welcome text */
+/* User section */
 .navbar__user {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 16px;
+  gap: 10px;
+  font-size: 14px;
   font-weight: 500;
   opacity: 0.9;
+}
+
+/* ✅ Avatar (SUDAH DIPINDAH KE LUAR MEDIA QUERY) */
+.navbar__user__image {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  aspect-ratio: 1/1;
+
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+
+  transition: all 0.3s ease;
+}
+
+.navbar__user__image:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
 }
 
 /* Button */
@@ -77,37 +96,12 @@
     padding: 0 20px;
   }
 
-.navbar__user {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 16px;
-  font-weight: 500;
-  opacity: 0.95;
-}
+  .navbar__brand {
+    font-size: 18px;
+  }
 
-/* Avatar image */
-.navbar__user__image {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #3b82f6;
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
-  transition: all 0.3s ease;
-}
-
-.navbar__user__image:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
-}
-
-
-.navbar__brand {
-  font-size: 18px;
-}
-
-.navbar__user {
-  display: none;
-}
+  /* sembunyikan teks user di mobile */
+  .navbar__user span {
+    display: none;
+  }
 }
